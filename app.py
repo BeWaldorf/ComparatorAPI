@@ -24,17 +24,17 @@ headers: dict = {'authority': 'www.amazon.com',
                     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/119.0.2151.97"
                 }
-myComparatorApi: Flask = Flask(__name__)
+app: Flask = Flask(__name__)
 page: Response
 soup: BeautifulSoup
 search_results: list[Tag]
 
     
-@myComparatorApi.route("/")
+@app.route("/")
 def index():
     return "Hello World!"
     
-@myComparatorApi.route("/browser_search/<string:country_code>/<string:search_term>")
+@app.route("/browser_search/<string:country_code>/<string:search_term>")
 def search(country_code, search_term):
     full_URL:str = req_URL[country_code] + search_term
     page = req_get(full_URL, headers=headers)
@@ -43,7 +43,7 @@ def search(country_code, search_term):
     result_items: list[SearchItem] = pretty_results(search_results)
     return generate_html_table(result_items)
     
-@myComparatorApi.route("/api_search/<string:country_code>/<string:search_term>")
+@app.route("/api_search/<string:country_code>/<string:search_term>")
 def api_search(country_code, search_term):
     full_URL:str = req_URL[country_code]+ search_term
     page = req_get(full_URL, headers=headers)
